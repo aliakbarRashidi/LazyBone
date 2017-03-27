@@ -13,7 +13,7 @@ class LazyBone : public QObject
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool inverted READ inverted WRITE setInverted NOTIFY invertedChanged)
     Q_PROPERTY(int preferredToggleTime READ preferredToggleTime WRITE setPreferredToggleTime NOTIFY preferredToggleTimeChanged)
-    Q_PROPERTY(bool state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(bool powered READ powered WRITE setPowered NOTIFY poweredChanged)
 public:
     explicit LazyBone(QObject *parent = 0);
 
@@ -32,8 +32,8 @@ public:
     int preferredToggleTime() const;
     void setPreferredToggleTime(int preferredToggleTime);
 
-    bool state() const;
-    void setState(bool state);
+    bool powered() const;
+    void setPowered(bool powered);
 
 signals:
     void addressChanged();
@@ -41,17 +41,17 @@ signals:
     void nameChanged();
     void invertedChanged();
     void preferredToggleTimeChanged();
-    void stateChanged();
+    void poweredChanged();
 
 private:
-    void updateState(bool state);
+    void updatePowered(bool powered);
 
     QString m_address;
     quint16 m_port = 2000;
     QString m_name;
     bool m_inverted = false;
     int m_preferredToggleTime = 500;
-    bool m_state = false;
+    bool m_powered = false;
     QTcpSocket m_socket;
 };
 

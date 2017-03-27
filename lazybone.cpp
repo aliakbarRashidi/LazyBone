@@ -76,23 +76,23 @@ void LazyBone::setPreferredToggleTime(int preferredToggleTime)
     emit preferredToggleTimeChanged();
 }
 
-bool LazyBone::state() const
+bool LazyBone::powered() const
 {
-    return m_state;
+    return m_powered;
 }
 
-void LazyBone::setState(bool state)
+void LazyBone::setPowered(bool powered)
 {
     m_socket.connectToHost(m_address, m_port);
     QThread::msleep(100);
-    m_socket.write(state ? "e" : "o");
+    m_socket.write(powered ? "e" : "o");
 }
 
-void LazyBone::updateState(bool state)
+void LazyBone::updatePowered(bool powered)
 {
-    if (m_state == state)
+    if (m_powered == powered)
         return;
 
-    m_state = state;
-    emit stateChanged();
+    m_powered = powered;
+    emit poweredChanged();
 }

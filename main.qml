@@ -13,7 +13,7 @@ ApplicationWindow {
         id: lb
         address: "192.168.0.14"
         property bool isOn: false
-        state: isOn
+        powered: isOn
     }
 
     Button {
