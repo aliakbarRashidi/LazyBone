@@ -86,7 +86,6 @@ bool LazyBone::powered() const
 
 void LazyBone::setPowered(bool powered)
 {
-    QThread::msleep(100);
     m_commandQueue.enqueue(powered ? "e" : "o");
 }
 
