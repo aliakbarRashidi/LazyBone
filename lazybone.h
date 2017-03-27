@@ -8,7 +8,7 @@
 class LazyBone : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
+    Q_PROPERTY(QString hostName READ hostName WRITE setHostName NOTIFY hostNameChanged)
     Q_PROPERTY(quint16 port READ port WRITE setPort NOTIFY portChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool inverted READ inverted WRITE setInverted NOTIFY invertedChanged)
@@ -17,8 +17,8 @@ class LazyBone : public QObject
 public:
     explicit LazyBone(QObject *parent = 0);
 
-    QString address() const;
-    void setAddress(QString address);
+    QString hostName() const;
+    void setHostName(QString hostName);
 
     quint16 port() const;
     void setPort(quint16 port);
@@ -36,7 +36,7 @@ public:
     void setPowered(bool powered);
 
 signals:
-    void addressChanged();
+    void hostNameChanged();
     void portChanged();
     void nameChanged();
     void invertedChanged();
@@ -46,7 +46,7 @@ signals:
 private:
     void updatePowered(bool powered);
 
-    QString m_address;
+    QString m_hostName;
     quint16 m_port = 2000;
     QString m_name;
     bool m_inverted = false;

@@ -11,7 +11,7 @@ ApplicationWindow {
 
     LazyBone {
         id: lb
-        address: "192.168.0.14"
+        hostName: "192.168.0.14"
         property bool isOn: false
         powered: isOn
     }

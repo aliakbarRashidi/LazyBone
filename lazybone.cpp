@@ -6,18 +6,18 @@ LazyBone::LazyBone(QObject *parent) : QObject(parent)
 
 }
 
-QString LazyBone::address() const
+QString LazyBone::hostName() const
 {
-    return m_address;
+    return m_hostName;
 }
 
-void LazyBone::setAddress(QString address)
+void LazyBone::setHostName(QString hostName)
 {
-    if (m_address == address)
+    if (m_hostName == hostName)
         return;
 
-    m_address = address;
-    emit addressChanged();
+    m_hostName = hostName;
+    emit hostNameChanged();
 }
 
 quint16 LazyBone::port() const
@@ -83,7 +83,7 @@ bool LazyBone::powered() const
 
 void LazyBone::setPowered(bool powered)
 {
-    m_socket.connectToHost(m_address, m_port);
+    m_socket.connectToHost(m_hostName, m_port);
     QThread::msleep(100);
     m_socket.write(powered ? "e" : "o");
 }
