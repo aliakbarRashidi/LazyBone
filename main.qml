@@ -1,7 +1,8 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import fr.grecko.LazyBone 1.0
+import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
     visible: true
@@ -16,6 +17,7 @@ ApplicationWindow {
 
     Button {
         anchors.centerIn: parent
+        Material.background: lb.powered ? Material.Yellow : Material.Indigo
         text: "Toggle"
         onClicked: lb.powered = !lb.powered
     }
