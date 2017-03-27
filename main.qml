@@ -12,13 +12,11 @@ ApplicationWindow {
     LazyBone {
         id: lb
         hostName: "192.168.0.14"
-        property bool isOn: false
-        powered: isOn
     }
 
     Button {
         anchors.centerIn: parent
         text: "Toggle"
-        onClicked: lb.isOn = !lb.isOn
+        onClicked: lb.powered = !lb.powered
     }
 }

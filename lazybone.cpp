@@ -3,10 +3,16 @@
 #include <QTimer>
 
 LazyBone::LazyBone(QObject *parent) : QObject(parent),
-    m_queueTimer{new QTimer{this}}
+    m_queueTimer{new QTimer{this}},
+    m_poweredTimer{new QTimer{this}}
 {
+    connect(&m_socket, &QIODevice::readyRead, this, &LazyBone::readSocketData);
+
     m_queueTimer->setInterval(50);
     connect(m_queueTimer, &QTimer::timeout, this, &LazyBone::processCommands);
+
+    m_poweredTimer->setInterval(200);
+    connect(m_poweredTimer, &QTimer::timeout, this, &LazyBone::queryPoweredState);
 }
 
 QString LazyBone::hostName() const
@@ -101,6 +107,12 @@ void LazyBone::componentComplete()
     connect(this, &LazyBone::portChanged, this, &LazyBone::updateSocket);
     updateSocket();
     m_queueTimer->start();
+    m_poweredTimer->start();
+}
+
+void LazyBone::queryPoweredState()
+{
+    m_commandQueue.enqueue("[");
 }
 
 void LazyBone::updatePowered(bool powered)
@@ -122,5 +134,16 @@ void LazyBone::processCommands()
 {
     if (m_socket.state() == QAbstractSocket::ConnectedState && !m_commandQueue.isEmpty()) {
         m_socket.write(m_commandQueue.dequeue());
+    }
+}
+
+void LazyBone::readSocketData()
+{
+    QByteArray data = m_socket.readAll();
+    if (!data.isEmpty()) {
+        char lastByte = data[data.length()-1];
+        if (lastByte == static_cast<char>(0x00) || lastByte == static_cast<char>(0x01)) {
+            updatePowered(lastByte == static_cast<char>(0x01));
+        }
     }
 }

@@ -52,9 +52,11 @@ signals:
     void poweredChanged();
 
 private:
+    void queryPoweredState();
     void updatePowered(bool powered);
     void updateSocket();
     void processCommands();
+    void readSocketData();
 
     QString m_hostName;
     quint16 m_port = 2000;
@@ -66,6 +68,7 @@ private:
     bool m_complete = false;
     QQueue<QByteArray> m_commandQueue;
     QTimer* m_queueTimer;
+    QTimer* m_poweredTimer;
 };
 
 #endif // LAZYBONE_H
