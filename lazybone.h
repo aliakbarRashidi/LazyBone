@@ -4,10 +4,15 @@
 #include <QObject>
 #include <QHostAddress>
 #include <QTcpSocket>
+#include <QQmlParserStatus>
+#include <QQueue>
+class QTimer;
 
-class LazyBone : public QObject
+class LazyBone : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
+
     Q_PROPERTY(QString hostName READ hostName WRITE setHostName NOTIFY hostNameChanged)
     Q_PROPERTY(quint16 port READ port WRITE setPort NOTIFY portChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -35,6 +40,9 @@ public:
     bool powered() const;
     void setPowered(bool powered);
 
+    void classBegin() override;
+    void componentComplete() override;
+
 signals:
     void hostNameChanged();
     void portChanged();
@@ -45,6 +53,8 @@ signals:
 
 private:
     void updatePowered(bool powered);
+    void updateSocket();
+    void processCommands();
 
     QString m_hostName;
     quint16 m_port = 2000;
@@ -53,6 +63,9 @@ private:
     int m_preferredToggleTime = 500;
     bool m_powered = false;
     QTcpSocket m_socket;
+    bool m_complete = false;
+    QQueue<QByteArray> m_commandQueue;
+    QTimer* m_queueTimer;
 };
 
 #endif // LAZYBONE_H

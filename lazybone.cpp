@@ -1,9 +1,12 @@
 #include "lazybone.h"
 #include <QThread>
+#include <QTimer>
 
-LazyBone::LazyBone(QObject *parent) : QObject(parent)
+LazyBone::LazyBone(QObject *parent) : QObject(parent),
+    m_queueTimer{new QTimer{this}}
 {
-
+    m_queueTimer->setInterval(50);
+    connect(m_queueTimer, &QTimer::timeout, this, &LazyBone::processCommands);
 }
 
 QString LazyBone::hostName() const
@@ -83,9 +86,22 @@ bool LazyBone::powered() const
 
 void LazyBone::setPowered(bool powered)
 {
-    m_socket.connectToHost(m_hostName, m_port);
     QThread::msleep(100);
-    m_socket.write(powered ? "e" : "o");
+    m_commandQueue.enqueue(powered ? "e" : "o");
+}
+
+void LazyBone::classBegin()
+{
+
+}
+
+void LazyBone::componentComplete()
+{
+    m_complete = true;
+    connect(this, &LazyBone::hostNameChanged, this, &LazyBone::updateSocket);
+    connect(this, &LazyBone::portChanged, this, &LazyBone::updateSocket);
+    updateSocket();
+    m_queueTimer->start();
 }
 
 void LazyBone::updatePowered(bool powered)
@@ -95,4 +111,17 @@ void LazyBone::updatePowered(bool powered)
 
     m_powered = powered;
     emit poweredChanged();
+}
+
+void LazyBone::updateSocket()
+{
+    m_socket.disconnectFromHost();
+    m_socket.connectToHost(m_hostName, m_port);
+}
+
+void LazyBone::processCommands()
+{
+    if (m_socket.state() == QAbstractSocket::ConnectedState && !m_commandQueue.isEmpty()) {
+        m_socket.write(m_commandQueue.dequeue());
+    }
 }
