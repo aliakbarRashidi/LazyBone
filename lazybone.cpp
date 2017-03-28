@@ -7,6 +7,8 @@ LazyBone::LazyBone(QObject *parent) : QObject(parent),
     m_poweredTimer{new QTimer{this}}
 {
     connect(&m_socket, &QIODevice::readyRead, this, &LazyBone::readSocketData);
+    connect(&m_socket, &QAbstractSocket::connected, m_poweredTimer, QOverload<>::of(&QTimer::start));
+    connect(&m_socket, &QAbstractSocket::disconnected, m_poweredTimer, &QTimer::stop);
 
     m_queueTimer->setInterval(50);
     connect(m_queueTimer, &QTimer::timeout, this, &LazyBone::processCommands);
@@ -107,7 +109,6 @@ void LazyBone::componentComplete()
     connect(this, &LazyBone::portChanged, this, &LazyBone::updateSocket);
     updateSocket();
     m_queueTimer->start();
-    m_poweredTimer->start();
 }
 
 void LazyBone::queryPoweredState()

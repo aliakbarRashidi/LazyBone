@@ -1,6 +1,6 @@
 QT += qml quick quickcontrols2 svg
 
-CONFIG += c++11
+CONFIG += c++14
 
 SOURCES += main.cpp \
     lazybone.cpp
