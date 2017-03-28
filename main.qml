@@ -105,8 +105,10 @@ ApplicationWindow {
                         anchors.centerIn: parent
                         property string iconSource: pane.editMode ? "check" : "settings"
                         source: "qrc:///images/icons/" + iconSource + ".svg"
+                        Behavior on iconSource { FadeAnimation { target: colorOverlay }}
                     }
                     ColorOverlay {
+                        id: colorOverlay
                         anchors.fill: icon
                         source: icon
                         color: Material.accent
