@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>DirtyFloatingTextField.qml</file>
+        <file>images/icons/check.svg</file>
+        <file>images/icons/settings.svg</file>
     </qresource>
 </RCC>

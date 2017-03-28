@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import fr.grecko.LazyBone 1.0
 import QtQuick.Controls.Material 2.1
+import QtGraphicalEffects 1.0
 
 ApplicationWindow {
     visible: true
@@ -98,6 +99,18 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignTop | Qt.AlignRight
                     Layout.topMargin: 12 - pane.topPadding
                     onClicked: pane.editMode = !pane.editMode
+                    Image {
+                        id: icon
+                        visible: false
+                        anchors.centerIn: parent
+                        property string iconSource: pane.editMode ? "check" : "settings"
+                        source: "qrc:///images/icons/" + iconSource + ".svg"
+                    }
+                    ColorOverlay {
+                        anchors.fill: icon
+                        source: icon
+                        color: Material.accent
+                    }
                 }
             }
             Button {
