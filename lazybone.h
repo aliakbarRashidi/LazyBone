@@ -19,6 +19,8 @@ class LazyBone : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool inverted READ inverted WRITE setInverted NOTIFY invertedChanged)
     Q_PROPERTY(int preferredToggleTime READ preferredToggleTime WRITE setPreferredToggleTime NOTIFY preferredToggleTimeChanged)
     Q_PROPERTY(bool powered READ powered WRITE setPowered NOTIFY poweredChanged)
+    Q_PROPERTY(QAbstractSocket::SocketState socketState READ socketState NOTIFY socketStateChanged)
+
 public:
     explicit LazyBone(QObject *parent = 0);
 
@@ -40,6 +42,8 @@ public:
     bool powered() const;
     void setPowered(bool powered);
 
+    QAbstractSocket::SocketState socketState() const;
+
     void classBegin() override;
     void componentComplete() override;
 
@@ -50,6 +54,7 @@ signals:
     void invertedChanged();
     void preferredToggleTimeChanged();
     void poweredChanged();
+    void socketStateChanged();
 
 private:
     void queryPoweredState();

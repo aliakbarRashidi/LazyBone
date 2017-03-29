@@ -47,6 +47,13 @@ ApplicationWindow {
             RowLayout {
                 width: parent.width
                 spacing: 16
+                Label {
+                    Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+                    text: lazyBone.socketState
+                    color: lazyBone.socketState === Socket.ConnectedState ? Material.color(Material.Green) : Material.color(Material.Red)
+                    opacity: pane.editMode ? 0 : 1
+                    Behavior on opacity { NumberAnimation { easing.type: Easing.InOutQuad }}
+                }
                 Column {
                     z: 2
                     id: column

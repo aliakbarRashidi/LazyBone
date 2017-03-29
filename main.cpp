@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     qmlRegisterType<LazyBone>("fr.grecko.LazyBone", 1, 0, "LazyBone");
+    qmlRegisterUncreatableType<QAbstractSocket>("fr.grecko.LazyBone", 1, 0, "Socket", "");
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();

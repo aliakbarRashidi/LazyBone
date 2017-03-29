@@ -9,6 +9,7 @@ LazyBone::LazyBone(QObject *parent) : QObject(parent),
     connect(&m_socket, &QIODevice::readyRead, this, &LazyBone::readSocketData);
     connect(&m_socket, &QAbstractSocket::connected, m_poweredTimer, QOverload<>::of(&QTimer::start));
     connect(&m_socket, &QAbstractSocket::disconnected, m_poweredTimer, &QTimer::stop);
+    connect(&m_socket, &QAbstractSocket::stateChanged, this, &LazyBone::socketStateChanged);
 
     m_queueTimer->setInterval(50);
     connect(m_queueTimer, &QTimer::timeout, this, &LazyBone::processCommands);
@@ -95,6 +96,11 @@ bool LazyBone::powered() const
 void LazyBone::setPowered(bool powered)
 {
     m_commandQueue.enqueue(powered ? "e" : "o");
+}
+
+QAbstractSocket::SocketState LazyBone::socketState() const
+{
+    return m_socket.state();
 }
 
 void LazyBone::classBegin()
